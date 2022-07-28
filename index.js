@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const uuid = require("uuid")
 const cors = require('cors')
+const Joi = require('joi')
 const app = express()
 
 app.use(cors())
@@ -31,21 +32,47 @@ app.get("/person/:id", (req, res) => {
 })
 
 app.post("/person", (req, res) => {
-    let person = {
-        id: uuid.v4(),
-        name: req.body.name,
-        age: req.body.age,
-        hobbies: req.body.hobbies || []
+
+    const schema = Joi.object().keys({
+        name: Joi.string().required(),
+        age: Joi.number().min(1).max(140).required(),
+        hobbies: Joi.array().required()
+    })
+
+    const { error } = schema.validate(req.body)
+    // res.send(validationResult)
+    if (error) {
+        res.status(400).json(error);
+    } else {
+        let person = {
+            id: uuid.v4(),
+            name: req.body.name,
+            age: req.body.age,
+            hobbies: req.body.hobbies || []
+        }
+        persons.push(person)
+        res.sendStatus(200)
     }
-    persons.push(person)
-    res.sendStatus(200)
 })
 
 app.put("/person/:id", (req, res) => {
     let idx = persons.findIndex(p => p.id == req.params.id)
+    const schema = Joi.object().keys({
+        name: Joi.string().required(),
+        age: Joi.number().min(1).max(140).required(),
+        hobbies: Joi.array().required()
+    })
+
+    const { error } = schema.validate(req.body)
+    
     if (idx == -1) {
         res.sendStatus(404)
-    } else {
+
+        // res.send(validationResult)
+    } else if (error) {
+        res.status(400).json(error);
+    }
+    else {
         let old = persons[idx]
         let person = {
             id: old.id,
