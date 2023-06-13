@@ -105,6 +105,11 @@ app.delete("/person/:personId", (req, res) => {
   res.json(deletedPerson);
 });
 
+// Error handling middleware for unmatched routes
+app.use((req, res) => {
+  res.status(404).json({ error: "No such route" });
+});
+
 if (require.main === module) {
   console.log("Server up and running on port 3000...");
   app.listen(3000);
