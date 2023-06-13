@@ -91,6 +91,20 @@ app.put("/person/:personId", (req, res) => {
   res.json(updatedPerson);
 });
 
+app.delete("/person/:personId", (req, res) => {
+  const personId = req.params.personId;
+  const personIndex = persons.findIndex((p) => p.id === personId);
+
+  if (personIndex === -1) {
+    res.status(404).send("Person not found");
+    return;
+  }
+
+  const deletedPerson = persons[personIndex];
+  persons.splice(personIndex, 1);
+  res.json(deletedPerson);
+});
+
 if (require.main === module) {
   console.log("Server up and running on port 3000...");
   app.listen(3000);
