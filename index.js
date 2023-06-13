@@ -26,11 +26,11 @@ let persons = [
 app.set("db", persons);
 //TODO: Implement crud of person
 
-app.get("/persons", (req, res) => {
+app.get("/person", (req, res) => {
   res.status(200).json(persons);
 });
 
-app.get("/persons/:personId", (req, res) => {
+app.get("/person/:personId", (req, res) => {
   const personId = req.params.personId;
 
   const person = persons.find((p) => p.id === personId);
