@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 const app = express();
 
 let persons = [
@@ -32,6 +33,31 @@ app.get("/persons", (req, res) => {
 app.get("/persons/:personId", (req, res) => {
   const personId = req.params.personId;
   res.json(persons[personId - 1]);
+});
+
+app.post("/person", (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    age: Joi.number().required(),
+    hobbies: Joi.array().items(Joi.string()).required(),
+  });
+
+  const { error, value } = schema.validate(req.body);
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  const person = {
+    id: uuidv4(),
+    name: req.body.name,
+    age: req.body.age,
+    hobbies: req.body.hobbies,
+  };
+
+  persons.push(person);
+  res.status(201).json(person);
 });
 
 if (require.main === module) {
