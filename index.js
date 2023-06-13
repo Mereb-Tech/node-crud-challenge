@@ -25,10 +25,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("db", persons);
 //TODO: Implement crud of person
 
+//Get all persons
 app.get("/person", (req, res) => {
   res.status(200).json(persons);
 });
 
+//Get with id
 app.get("/person/:personId", (req, res) => {
   const personId = req.params.personId;
 
@@ -41,8 +43,9 @@ app.get("/person/:personId", (req, res) => {
   res.status(200).send(person);
 });
 
+//Post endpoint
 app.post("/person", (req, res) => {
-  const { error, value } = schema.validate(req.body);
+  const { error, _ } = schema.validate(req.body);
 
   if (error) {
     res.status(400).send(error.details[0].message);
@@ -60,7 +63,7 @@ app.post("/person", (req, res) => {
   res.status(200).json(person);
 });
 
-//Put enpoint
+//Put endpoint
 app.put("/person/:personId", (req, res) => {
   const personId = req.params.personId;
   const personIndex = persons.findIndex((p) => p.id === personId);
@@ -70,7 +73,7 @@ app.put("/person/:personId", (req, res) => {
     return;
   }
 
-  const { error, value } = schema.validate(req.body);
+  const { error, _ } = schema.validate(req.body);
 
   if (error) {
     res.status(400).send(error.details[0].message);
