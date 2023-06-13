@@ -105,9 +105,15 @@ app.delete("/person/:personId", (req, res) => {
   res.json(deletedPerson);
 });
 
-// Error handling middleware for unmatched routes
+// Error handling for unmatched routes
 app.use((req, res) => {
   res.status(404).json({ error: "No such route" });
+});
+
+//Handle server errors
+app.use((err, req, res) => {
+  console.log(err);
+  res.status(500).json({ error: "Internal server error" });
 });
 
 if (require.main === module) {
