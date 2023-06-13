@@ -105,13 +105,17 @@ app.delete("/person/:personId", (req, res) => {
   res.json(deletedPerson);
 });
 
+app.get("/error", (req, res) => {
+  res.send(error());
+});
+
 // Error handling for unmatched routes
 app.use((req, res) => {
   res.status(404).json({ error: "No such route" });
 });
 
 //Handle server errors
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.log(err);
   res.status(500).json({ error: "Internal server error" });
 });
