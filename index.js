@@ -11,19 +11,13 @@ let persons = [
     age: "26",
     hobbies: [],
   },
-  // {
-  //   id: "2",
-  //   name: "Nat",
-  //   age: "22",
-  //   hobbies: [],
-  // },
-  // {
-  //   id: "3",
-  //   name: "Dan",
-  //   age: "30",
-  //   hobbies: [],
-  // },
 ]; //This is your in memory database
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  age: Joi.number().required(),
+  hobbies: Joi.array().items(Joi.string()).required(),
+});
 
 // Middleware to parse JSON and URL-encoded form data
 app.use(bodyParser.json());
@@ -48,12 +42,6 @@ app.get("/person/:personId", (req, res) => {
 });
 
 app.post("/person", (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    age: Joi.number().required(),
-    hobbies: Joi.array().items(Joi.string()).required(),
-  });
-
   const { error, value } = schema.validate(req.body);
 
   if (error) {
@@ -70,6 +58,34 @@ app.post("/person", (req, res) => {
 
   persons.push(person);
   res.status(200).json(person);
+});
+
+//Put enpoint
+app.put("/person/:personId", (req, res) => {
+  const personId = req.params.personId;
+  const personIndex = persons.findIndex((p) => p.id === personId);
+
+  if (personIndex === -1) {
+    res.status(404).send("Person not found");
+    return;
+  }
+
+  const { error, value } = schema.validate(req.body);
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  const updatedPerson = {
+    ...persons[personIndex],
+    name: req.body.name,
+    age: req.body.age,
+    hobbies: req.body.hobbies,
+  };
+
+  persons[personIndex] = updatedPerson;
+  res.json(updatedPerson);
 });
 
 if (require.main === module) {
