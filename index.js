@@ -27,12 +27,19 @@ app.set("db", persons);
 //TODO: Implement crud of person
 
 app.get("/persons", (req, res) => {
-  res.json(persons);
+  res.status(200).json(persons);
 });
 
 app.get("/persons/:personId", (req, res) => {
   const personId = req.params.personId;
-  res.json(persons[personId - 1]);
+
+  const person = persons.find((p) => p.id === personId);
+
+  if (!person) {
+    res.status(404).send("Person not found");
+    return;
+  }
+  res.status(200).send(person);
 });
 
 app.post("/person", (req, res) => {
