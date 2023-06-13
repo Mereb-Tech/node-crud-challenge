@@ -1,17 +1,23 @@
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 
-let persons = [{
-    id: '1',
-    name: 'Sam',
-    age: '26',
-    hobbies: []    
-}] //This is your in memory database
+let persons = [
+  {
+    id: "1",
+    name: "Sam",
+    age: "26",
+    hobbies: [],
+  },
+]; //This is your in memory database
 
-app.set('db', persons)
+app.set("db", persons);
 //TODO: Implement crud of person
 
+app.get("/person", (req, res) => {
+  res.json(persons);
+});
+
 if (require.main === module) {
-    app.listen(3000)
+  app.listen(3000);
 }
 module.exports = app;
