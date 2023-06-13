@@ -1,4 +1,6 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const { v4: uuidv4 } = require("uuid");
 const Joi = require("joi");
 const app = express();
 
@@ -9,20 +11,23 @@ let persons = [
     age: "26",
     hobbies: [],
   },
-  {
-    id: "2",
-    name: "Nat",
-    age: "22",
-    hobbies: [],
-  },
-  {
-    id: "3",
-    name: "Dan",
-    age: "30",
-    hobbies: [],
-  },
+  // {
+  //   id: "2",
+  //   name: "Nat",
+  //   age: "22",
+  //   hobbies: [],
+  // },
+  // {
+  //   id: "3",
+  //   name: "Dan",
+  //   age: "30",
+  //   hobbies: [],
+  // },
 ]; //This is your in memory database
 
+// Middleware to parse JSON and URL-encoded form data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set("db", persons);
 //TODO: Implement crud of person
 
@@ -64,7 +69,7 @@ app.post("/person", (req, res) => {
   };
 
   persons.push(person);
-  res.status(201).json(person);
+  res.status(200).json(person);
 });
 
 if (require.main === module) {
