@@ -105,19 +105,20 @@ app.delete("/person/:personId", (req, res) => {
   res.json(deletedPerson);
 });
 
+//A route destined to fail to test error handling
 app.get("/error", (req, res) => {
   res.send(error());
 });
 
 // Error handling for unmatched routes
 app.use((req, res) => {
-  res.status(404).json({ error: "No such route" });
+  res.status(404).json("No such route");
 });
 
 //Handle server errors
 app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ error: "Internal server error" });
+  // console.log(err);
+  res.status(500).json("Internal server error");
 });
 
 if (require.main === module) {
