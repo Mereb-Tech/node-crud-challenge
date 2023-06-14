@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CORS Test</title>
+  </head>
+  <body>
+    <h1>CORS Test</h1>
+    <button id="corsButton">Make CORS Request</button>
+    <script>
+      const button = document.getElementById("corsButton");
+      button.addEventListener("click", async () => {
+        try {
+          const response = await fetch("http://localhost:3000/person");
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    </script>
+  </body>
+</html>

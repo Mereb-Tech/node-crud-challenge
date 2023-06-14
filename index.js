@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const Joi = require("joi");
 const app = express();
@@ -22,6 +23,7 @@ const schema = Joi.object({
 // Middleware to parse JSON and URL-encoded form data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.set("db", persons);
 //TODO: Implement crud of person
 
