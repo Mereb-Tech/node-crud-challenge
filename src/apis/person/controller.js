@@ -10,7 +10,7 @@ exports.createPerson = async (req, res, next) => {
     // Response
     res.status(200).json({
       status: "SUCCESS",
-      message: "Person creates successfully",
+      message: "Person created successfully",
       data: { person },
     });
   } catch (error) {
@@ -24,7 +24,11 @@ exports.getAll = async (req, res, next) => {
     const persons = await Persons.findAll();
 
     // Response
-    res.status(200).json(persons);
+    res.status(200).json({
+      status: "SUCCESS",
+      results: persons.length,
+      data: { persons },
+    });
   } catch (error) {
     next(error);
   }
@@ -33,15 +37,18 @@ exports.getAll = async (req, res, next) => {
 // Get a person's data
 exports.getById = async (req, res, next) => {
   try {
-    let person = await Persons.findById(req.params.personId);
+    const person = await Persons.findById(req.params.personId);
 
-    // Check if person is null or undefined, then set it to undefined
+    // Check if person is not found
     if (!person) {
-      return res.status(404).json(undefined);
+      return next(new AppError("Person not found", 404));
     }
 
-    // Response with the found person
-    res.status(200).json(person);
+    // Response
+    res.status(200).json({
+      status: "SUCCESS",
+      data: person,
+    });
   } catch (error) {
     next(error);
   }
@@ -52,9 +59,14 @@ exports.update = async (req, res, next) => {
   try {
     const data = req.body;
     const person = await Persons.update(req.params.personId, data);
+    if (!person) return next(new AppError("Person does not exist", 404));
 
     // Response
-    res.status(200).json(person);
+    res.status(200).json({
+      statu: "SUCCESS",
+      message: "Person data updated successfully",
+      data: { person },
+    });
   } catch (error) {
     next(error);
   }
@@ -64,6 +76,7 @@ exports.update = async (req, res, next) => {
 exports.deleteById = async (req, res, next) => {
   try {
     const personDeleted = await Persons.deleteById(req.params.personId);
+    if (!personDeleted) return next(new AppError("Person does not exist", 404));
 
     // Response
     res.status(200).json({
@@ -78,12 +91,12 @@ exports.deleteById = async (req, res, next) => {
 // Delete all persons in DB
 exports.deleteAll = async (req, res, next) => {
   try {
-    await Persons.deleteAll();
+    Persons.deleteAll();
 
     // Resposne
     res.status(200).json({
       status: "SUCCESS",
-      message: "All persons data has been deleted successfully",
+      message: "All persons data have been deleted successfully",
     });
   } catch (error) {
     next(error);

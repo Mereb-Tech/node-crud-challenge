@@ -1,8 +1,3 @@
-/**
- * This is the error middleware file.
- * It send different message for dev and production
- */
-
 // AppError
 const AppError = require("./appError");
 
@@ -35,7 +30,7 @@ const errMessageForProduction = (err, res) => {
 };
 
 /**
- * The error handler middleware
+ * The global error handler middleware
  */
 const geh = (err, req, res, next) => {
   err.status = err.status || "ERROR";

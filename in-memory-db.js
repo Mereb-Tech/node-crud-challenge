@@ -1,5 +1,4 @@
 const { v4: uuid4 } = require("uuid");
-const AppError = require("./src/utils/appError");
 
 class InMemoryDatabase {
   constructor() {
