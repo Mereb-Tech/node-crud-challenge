@@ -10,7 +10,7 @@ class InMemoryDatabase {
   store(data) {
     const id = uuid4(); // Generate id
     const person = { id, ...data }; // Prepare person data
-    this.data.push(person); // Persist person data to the IMDB
+    this.data.unshift(person); // Persist person data to the IMDB
     return person; // Return the newly created person data
   }
 
@@ -22,7 +22,7 @@ class InMemoryDatabase {
   // Method to get person data by id
   findById(id) {
     const person = this.data.find((person) => {
-      person.id === id;
+      return person.id === id;
     });
     return person;
   }

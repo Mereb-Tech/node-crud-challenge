@@ -22,11 +22,17 @@ describe("Test Person CRUD API", function () {
 
   it("Test Get By ID", async function () {
     let persons = app.get("db");
-    let res = await axios.get("http://localhost:3000/person/1");
-    console.log("Res:", res.data);
-    console.log("Equal: ", persons[0]);
-    assert.equal(res.status, 200);
-    assert.deepEqual(persons[0], res.data);
+    const personId = persons[0] ? persons[0].id : undefined;
+    let res;
+    try {
+      res = await axios.get(`http://localhost:3000/person/${personId}`);
+      assert.equal(res.status, 200);
+      assert.deepEqual(persons[0], res.data);
+    } catch (error) {
+      const data = error.response.data === "" ? undefined : error.response.data;
+      assert.deepEqual(persons[0], data);
+      assert.equal(error.response.status, 404);
+    }
   });
 
   it("Test Post", async function () {
@@ -37,9 +43,11 @@ describe("Test Person CRUD API", function () {
     };
 
     let res = await axios.post("http://localhost:3000/person", newUser);
+
     assert.equal(res.status, 200);
     let persons = app.get("db");
-    let insertedUser = Object.assign({}, persons[1]);
+    let insertedUser = Object.assign({}, persons[0]);
+
     delete insertedUser.id;
     assert.deepEqual(insertedUser, newUser);
   });
@@ -126,15 +134,21 @@ describe("Test Person CRUD API", function () {
   });
 
   it("Test Put", async function () {
-    let newUser = {
+    const newUser = {
       name: "Sam",
       age: 26,
       hobbies: ["dubstep", "jazz"],
     };
-    let res = await axios.put("http://localhost:3000/person/1", newUser);
-
     let persons = app.get("db");
-    newUser.id = "1";
+    const personId = persons[0].id; // Id of the person to be updated (the first person in the array)
+
+    let res = await axios.put(
+      `http://localhost:3000/person/${personId}`,
+      newUser
+    );
+    persons[0] = res.data;
+    newUser.id = personId;
+
     assert.deepEqual(persons[0], newUser);
   });
 

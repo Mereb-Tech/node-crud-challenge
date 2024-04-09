@@ -33,9 +33,14 @@ exports.getAll = async (req, res, next) => {
 // Get a person's data
 exports.getById = async (req, res, next) => {
   try {
-    const person = await Persons.findById(req.params.personId);
+    let person = await Persons.findById(req.params.personId);
 
-    // Response
+    // Check if person is null or undefined, then set it to undefined
+    if (!person) {
+      return res.status(404).json(undefined);
+    }
+
+    // Response with the found person
     res.status(200).json(person);
   } catch (error) {
     next(error);
@@ -47,14 +52,9 @@ exports.update = async (req, res, next) => {
   try {
     const data = req.body;
     const person = await Persons.update(req.params.personId, data);
-    if (!person) return next(new AppError("Person does not exist", 404));
 
     // Response
-    res.status(200).json({
-      status: "SUCCESS",
-      message: "Person data updated successfully",
-      data: { person },
-    });
+    res.status(200).json(person);
   } catch (error) {
     next(error);
   }
@@ -64,7 +64,6 @@ exports.update = async (req, res, next) => {
 exports.deleteById = async (req, res, next) => {
   try {
     const personDeleted = await Persons.deleteById(req.params.personId);
-    if (!personDeleted) return next(new AppError("Person does not exist", 404));
 
     // Response
     res.status(200).json({
