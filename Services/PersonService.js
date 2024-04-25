@@ -45,16 +45,16 @@ class PersonServices {
 
   async createPerson(person) {
     const { error } = this.model.validate(person);
+    
+    if (error) {
+      throw new AppError(error.message, 400);
+    }
 
     // for test purpose
     if (this.persons.some((p) => p.id === "1")) {
       person.id = uuid();
     } else {
       person.id = "1";
-    }
-
-    if (error) {
-      throw new AppError(error.message, 400);
     }
 
     this.persons.push(person);
@@ -64,7 +64,7 @@ class PersonServices {
     if (err) {
       throw new Error("Error writing file");
     }
-
+    // for test purpose
     this.app.set("db", this.persons);
 
     return person;
@@ -90,6 +90,8 @@ class PersonServices {
     if (err) {
       throw new Error("Error writing file");
     }
+   
+    // for test purpose
     this.app.set("db", this.persons);
 
     return person;
@@ -108,8 +110,9 @@ class PersonServices {
     if (err) {
       throw new Error("Error writing file");
     }
+    // for test purpose
     this.app.set("db", this.persons);
-    return true;
+    return {};
   }
 
   getPerson(id) {
