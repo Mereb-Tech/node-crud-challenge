@@ -13,7 +13,7 @@ const PersonsDB = PersonServices.getInstance(DBPath, Person, app);
 // TO simulate in memory database for the test
 PersonsDB.deleteAllPersons();
 
-// Create one Person File with id 1 for test
+// Create one Person with id 1 for test
 PersonsDB.createPerson({
   name: "natty",
   age: 23,
