@@ -1,6 +1,6 @@
 const AppError = require("./Utils/appError");
 const globalErrorHandler = require("./Controllers/errorController");
-const personRouter = require("./Routers/presonRouter");
+const personRouter = require("./Routers/personRouter");
 const express = require("express");
 const cors = require("cors");
 const PersonService = require("./Services/PersonService");

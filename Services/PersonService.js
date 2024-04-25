@@ -3,7 +3,7 @@ const { promisify } = require("util");
 const AppError = require("../Utils/appError");
 const uuid = require("uuid").v4;
 
-// This DB reads presons.json an initilize and write on create ,detete and update operation.
+// This DB reads presons.json on initilization and write on create,detete and update operation.
 
 class PersonServices {
   constructor(path, model, app) {
@@ -46,7 +46,7 @@ class PersonServices {
   async createPerson(person) {
     const { error } = this.model.validate(person);
 
-    // for test perpose
+    // for test purpose
     if (this.persons.some((p) => p.id === "1")) {
       person.id = uuid();
     } else {
@@ -83,7 +83,6 @@ class PersonServices {
     person.id = id;
 
     const index = this.persons.findIndex((p) => p.id === person.id);
-    console.log(index);
 
     this.persons[index] = person;
     const err = await this._writeFile(this.persons);
