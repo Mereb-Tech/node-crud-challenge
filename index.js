@@ -1,17 +1,30 @@
-const express = require('express')
-const app = express()
+const dotenv = require("dotenv");
+const PersonServices = require("./Services/PersonService");
+const Person = require("./Models/person");
 
-let persons = [{
-    id: '1',
-    name: 'Sam',
-    age: '26',
-    hobbies: []    
-}] //This is your in memory database
+dotenv.config();
+const DBPath = process.env.DATABASE_PATH;
 
-app.set('db', persons)
-//TODO: Implement crud of person
+const app = require("./app");
 
-if (require.main === module) {
-    app.listen(3000)
-}
+// This DB is save data to Persons.json file
+const PersonsDB = PersonServices.getInstance(DBPath, Person, app);
+
+// TO simulate in memory database for the test
+PersonsDB.deleteAllPersons();
+
+// Create one Person with id 1 for test
+PersonsDB.createPerson({
+  name: "natty",
+  age: 23,
+  hobbies: ["football", "coding", "film"],
+});
+
+app.set("db", PersonsDB.getAllPersons());
+
+const port = process.env.PORT || 3000;
+/*const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});*/
+
 module.exports = app;
