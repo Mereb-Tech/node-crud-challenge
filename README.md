@@ -1,22 +1,109 @@
-# node-crud-challenge
+# Node CRUD Challenge
 
-## Implement Simple CRUD API
+A simple CRUD API built using Node.js and Express with an in-memory database.
 
-Your task is to implement simple CRUD API using in-memory database underneath.  
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Error Handling](#error-handling)
 
-## Details:
+## Project Overview
 
-1. The task must be solved using only **express** and proveded packages in **package.json**. Any libraries and packages **are prohibited**.
-2. API path `/person`:
-    * **GET** `/person` or `/person/${personId}` should return all persons or person with corresponding `personId`
-    * **POST** `/person` is used to create record about new person and store it in database
-    * **PUT** `/person/${personId}` is used to update record about existing person
-    * **DELETE** `/person/${personId}` is used to delete record about existing person from database
-3. Persons are stored as `objects` that have following properties:
-    * `id` — unique identifier (`string`, `uuid`) generated on server side
-    * `name` — person's name (`string`, **required**)
-    * `age` — person's age (`number`, **required**)
-    * `hobbies` — person's hobbies (`array` of `strings` or empty `array`, **required**)
-4. Requests to non-existing endpoints (e.g. `/some-non/existing/resource`) should be handled.
-5. Internal server errors should be handled and processed correctly.
-6. Make sure the api is accesible by frontend apps hosted on a different domain (cross-site resource sharing)
+This project demonstrates a simple CRUD API built using **Express** for managing a collection of persons. It supports the following operations:
+- Create a new person
+- Retrieve all persons or a specific person by ID
+- Update an existing person by ID
+- Delete a person by ID
+
+### Person Schema
+Each person is represented as an object with the following properties:
+- `id` (string, UUID) – A unique identifier generated on the server side.
+- `name` (string) – The person's name (required).
+- `age` (number) – The person's age (required).
+- `hobbies` (array of strings) – The person's hobbies (required, can be an empty array).
+
+## Requirements
+
+- Node.js
+- Express
+
+## Installation
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/hanagt/node-crud-challenge.git
+    cd node-crud-challenge
+    ```
+
+2. Install the required packages:
+    ```bash
+    npm install
+    ```
+
+## Running the Application
+
+To start the server, run the following command:
+
+```bash
+node server.js
+```
+
+The server will be running at http://localhost:3000.
+
+## API Endpoints
+
+### **GET** `/person`
+
+- **Description**: Retrieves all persons from the in-memory database.
+- **Response**:
+  - **200 OK**: A list of all persons (empty array if none exist).
+
+### **GET** `/person/:id`
+
+- **Description**: Retrieves a specific person by their unique `id`.
+- **Parameters**: `id` (string) – The unique ID of the person.
+- **Response**:
+  - **200 OK**: The person object if found.
+  - **404 Not Found**: If the person with the given `id` does not exist.
+
+### **POST** `/person`
+
+- **Description**: Creates a new person.
+- **Body**:
+  - `name` (string, required)
+  - `age` (number, required)
+  - `hobbies` (array of strings, required)
+- **Response**:
+  - **201 Created**: The newly created person object.
+  - **400 Bad Request**: If the input data is invalid.
+
+### **PUT** `/person/:id`
+
+- **Description**: Updates an existing person by their unique `id`.
+- **Parameters**: `id` (string) – The unique ID of the person.
+- **Body**:
+  - `name` (string, required)
+  - `age` (number, required)
+  - `hobbies` (array of strings, required)
+- **Response**:
+  - **200 OK**: The updated person object.
+  - **400 Bad Request**: If the input data is invalid.
+  - **404 Not Found**: If the person with the given `id` does not exist.
+
+### **DELETE** `/person/:id`
+
+- **Description**: Deletes a person by their unique `id`.
+- **Parameters**: `id` (string) – The unique ID of the person.
+- **Response**:
+  - **204 No Content**: If the person is successfully deleted.
+  - **404 Not Found**: If the person with the given `id` does not exist.
+
+## Error Handling
+
+The API handles the following errors:
+- **404 Not Found**: Returned when a resource or endpoint is not found.
+- **400 Bad Request**: Returned when the input data is invalid (e.g., missing required fields).
+- **500 Internal Server Error**: For any unexpected errors on the server.
